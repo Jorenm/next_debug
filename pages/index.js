@@ -1,30 +1,6 @@
 import Head from 'next/head'
-import Image from 'next/image'
+import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-
-import {render} from 'datocms-structured-text-to-html-string'
-
-const dastData = JSON.parse(`{
-	"body": {
-		"value": {
-			"schema": "dast",
-			"document": {
-				"type": "root",
-				"children": [
-					{
-						"item": "121563956",
-						"type": "block"
-					}
-				]
-			}
-		},
-		"blocks": [{
-			"id": "121563956",
-			"content": "<table><tr><td>This is a table</td></tr></table>",
-			"_modelApiKey": "wysiwyg_block"
-		}]
-	}
-}`)
 
 export default function Home(props) {
 	console.log(props)
@@ -37,37 +13,16 @@ export default function Home(props) {
 			</Head>
 
 			<main className={styles.main}>
-				{props.rendered}
+				<div>{props.time} <button><a href="/api/revalidate?slug=/">Revalidate</a></button></div>
 			</main>
-
-			<footer className={styles.footer}>
-				<a
-					href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Powered by{' '}
-					<span className={styles.logo}>
-						<Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-					</span>
-				</a>
-			</footer>
 		</div>
 	)
 }
 
 export async function getStaticProps(context) {
-	const rendered = render(dastData.body, {
-		renderBlock({record, adapter: {renderNode}}) {
-			if (record._modelApiKey == 'wysiwyg_block') {
-				return `<div class="wysiwyg_block">${record.content}</div>`
-			}
-		}
-	})
-
 	return {
 		props: {
-			rendered
+			time: Date.now()
 		}
 	}
 }
