@@ -3,7 +3,6 @@ import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 
 export default function Home(props) {
-	console.log(props)
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -13,6 +12,7 @@ export default function Home(props) {
 			</Head>
 
 			<main className={styles.main}>
+				<h1>Preview: {props.preview}</h1>
 				<div>{props.time} <button><a href="/api/revalidate?slug=/">Revalidate</a></button></div>
 			</main>
 		</div>
@@ -22,7 +22,8 @@ export default function Home(props) {
 export async function getStaticProps(context) {
 	return {
 		props: {
-			time: Date.now()
+			time: Date.now(),
+			preview: context.preview ? 'true' : 'false'
 		}
 	}
 }
